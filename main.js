@@ -1,4 +1,4 @@
-(function ($, app) {
+(function ($, App) {
   'use strict';
 
   var ctx; // canvas 2d context
@@ -6,14 +6,15 @@
   var bounds;
   var cellSize = 14;
   var gridSize = 25;
+  var gridBorderWidth = 1;
 
   $(init);
 
   function init() {
     // init canvas
     var canvas = document.getElementById('canvas');
-    canvas.width = cellSize * gridSize + 2 * gridSize + 2;
-    canvas.height = cellSize * gridSize + 2 * gridSize + 2;
+    canvas.width = cellSize * gridSize + gridBorderWidth * gridSize + gridBorderWidth;
+    canvas.height = cellSize * gridSize + gridBorderWidth * gridSize + gridBorderWidth;
     ctx = canvas.getContext('2d');
     drawGrid();
 
@@ -29,7 +30,7 @@
     grid = createGrid();
 
     // init pattern
-    window.app.setPattern('acorn', grid);
+    App.Patterns.setPattern('acorn', grid);
 
     // start program
 
@@ -127,23 +128,23 @@
   }
 
   function drawGrid() {
-    var width = cellSize * gridSize + 2 * gridSize + 2;
-    var height = cellSize * gridSize + 2 * gridSize + 2;
+    var width = (cellSize * gridSize) + (gridBorderWidth * gridSize) + gridBorderWidth;
+    var height = (cellSize * gridSize) + (gridBorderWidth * gridSize) + gridBorderWidth;
 
     ctx.fillStyle = 'rgb(200,200,200)';
     for (var x = 0; x <= (width - 2) / cellSize; x++) {
       // horizontal
       ctx.fillRect(
         0,
-        (x * cellSize) + (x * 2),
+        (x * cellSize) + (x * gridBorderWidth),
         width,
-        2
+        gridBorderWidth
       );
       // vertical
       ctx.fillRect(
-        (x * cellSize) + (x * 2),
+        (x * cellSize) + (x * gridBorderWidth),
         0,
-        2,
+        gridBorderWidth,
         height
       );
     }
@@ -151,8 +152,10 @@
 
   function drawCell(x, y) {
     var isAlive = checkIsAlive(x, y);
+    var canvasX = (x * cellSize) + (x * gridBorderWidth) + gridBorderWidth;
+    var canvasY = (y * cellSize) + (y * gridBorderWidth) + gridBorderWidth;
     ctx.fillStyle = isAlive ? 'rgb(0,0,0)' : 'rgb(255,255,255)';
-    ctx.fillRect(x * cellSize + x * 2 + 2, y * cellSize + y * 2 + 2, cellSize, cellSize);
+    ctx.fillRect(canvasX, canvasY, cellSize, cellSize);
   }
 
   function forEachCell(fn) {
@@ -163,4 +166,4 @@
     }
   }
 
-})(jQuery, window.app || {});
+})(jQuery, window.App || {});

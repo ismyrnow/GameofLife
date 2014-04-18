@@ -1,6 +1,6 @@
 {
   "browser": true,
-  "predef": ["jQuery"],
+  "predef": ["App", "jQuery"],
   "curly": true,
   "latedef": "nofunc",
   "eqeqeq": true,

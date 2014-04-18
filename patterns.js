@@ -1,7 +1,13 @@
-(function (app) {
+/* global App:true */
+
+window.App = window.App || {};
+
+App.Patterns = (function () {
   'use strict';
 
-  app.setPattern = function (pattern, grid) {
+  var exports = {};
+
+  exports.setPattern = function (pattern, grid) {
 
     switch (pattern) {
 
@@ -36,4 +42,6 @@
 
   };
 
-})(window.app || {});
+  return exports;
+
+})();
