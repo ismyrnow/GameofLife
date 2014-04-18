@@ -1,5 +1,4 @@
-/* global $ */
-$(function () {
+(function ($, app) {
   'use strict';
 
   var ctx; // canvas 2d context
@@ -8,7 +7,7 @@ $(function () {
   var cellSize = 14;
   var gridSize = 25;
 
-  init();
+  $(init);
 
   function init() {
     // init canvas
@@ -164,4 +163,4 @@ $(function () {
     }
   }
 
-});
+})(jQuery, window.app || {});

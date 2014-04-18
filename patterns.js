@@ -1,9 +1,7 @@
-(function () {
+(function (app) {
   'use strict';
 
-  window.app = {};
-
-  window.app.setPattern = function (pattern, grid) {
+  app.setPattern = function (pattern, grid) {
 
     switch (pattern) {
 
@@ -38,4 +36,4 @@
 
   };
 
-})();
+})(window.app || {});
