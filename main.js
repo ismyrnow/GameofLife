@@ -2,8 +2,7 @@
   'use strict';
 
   var ctx; // canvas 2d context
-  var grid; // 2d array of 1's and 0's (live and dead)
-  var bounds;
+  var grid;
   var cellSize = 14;
   var gridSize = 25;
   var gridBorderWidth = 1;
@@ -18,19 +17,16 @@
     ctx = canvas.getContext('2d');
     drawGrid();
 
-    // init bounds
-    bounds = {
+    // init grid
+    grid = new App.Grid({
       xMin: 0,
       xMax: gridSize,
       yMin: 0,
       yMax: gridSize
-    };
-
-    // init grid
-    grid = createGrid();
+    });
 
     // init pattern
-    App.Patterns.setPattern('acorn', grid);
+    grid.setPattern('acorn');
 
     // start program
 
@@ -42,89 +38,32 @@
       if (count-- === 0) {
         clearInterval(id);
       }
-    }, 200);
-  }
-
-  function createGrid() {
-    var grid = new Array(bounds.xMax);
-
-    for (var x = bounds.xMin - 1; x <= bounds.xMax + 1; x++) {
-      grid[x] = new Array(bounds.yMax + 1);
-      for (var y = bounds.yMin - 1; y <= bounds.yMax + 1; y++) {
-        grid[x][y] = 0;
-      }
-    }
-
-    return grid;
+    }, 100);
   }
 
   function tick() {
-    var newGrid = createGrid();
-    var newBounds = cloneBounds();
+    var newGrid = new App.Grid(grid.bounds);
 
-    forEachCell(function (x, y) {
-      var alive = checkIsAlive(x, y);
-      var neighbors = countLiveNeighbors(x, y);
+    grid.forEachCell(function (x, y) {
+      var alive = grid.checkIsAlive(x, y);
+      var neighbors = grid.countLiveNeighbors(x, y);
 
       if (alive && neighbors < 2) {
-        newGrid[x][y] = 0;
+        newGrid.setAt(x, y, 0);
       } else if (alive && (neighbors === 2 || neighbors === 3)) {
-        newGrid[x][y] = 1;
-        extendBounds(newBounds, x, y);
+        newGrid.setAt(x, y, 1);
       } else if (alive && neighbors > 3) {
-        newGrid[x][y] = 0;
+        newGrid.setAt(x, y, 0);
       } else if (!alive && neighbors === 3) {
-        newGrid[x][y] = 1;
-        extendBounds(newBounds, x, y);
+        newGrid.setAt(x, y, 1);
       }
     });
 
     grid = newGrid;
-    bounds = newBounds;
-  }
-
-  function countLiveNeighbors(x, y) {
-    var n = 0;
-
-    for (var dx = -1; dx < 2; dx++) {
-      for (var dy = -1; dy < 2; dy++) {
-        if (grid[x + dx] && grid[x + dx][y + dy]) {
-          n += grid[x + dx][y + dy];
-        }
-      }
-    }
-
-    if (grid[x] && grid[x][y]) {
-      n -= grid[x][y];
-    }
-
-    return n;
-  }
-
-  function cloneBounds() {
-    var newBounds = {
-      xMin: bounds.xMin,
-      xMax: bounds.xMax,
-      yMin: bounds.yMin,
-      yMax: bounds.yMax
-    };
-
-    return newBounds;
-  }
-
-  function extendBounds(bounds, x, y) {
-    bounds.xMin = Math.min(bounds.xMin, x);
-    bounds.xMax = Math.max(bounds.xMax, x);
-    bounds.yMin = Math.min(bounds.yMin, y);
-    bounds.yMax = Math.max(bounds.yMax, y);
   }
 
   function redraw() {
-    forEachCell(drawCell);
-  }
-
-  function checkIsAlive(x, y) {
-    return grid[x] && grid[x][y] && grid[x][y] === 1;
+    grid.forEachCell(drawCell);
   }
 
   function drawGrid() {
@@ -151,19 +90,11 @@
   }
 
   function drawCell(x, y) {
-    var isAlive = checkIsAlive(x, y);
+    var isAlive = grid.checkIsAlive(x, y);
     var canvasX = (x * cellSize) + (x * gridBorderWidth) + gridBorderWidth;
     var canvasY = (y * cellSize) + (y * gridBorderWidth) + gridBorderWidth;
     ctx.fillStyle = isAlive ? 'rgb(0,0,0)' : 'rgb(255,255,255)';
     ctx.fillRect(canvasX, canvasY, cellSize, cellSize);
-  }
-
-  function forEachCell(fn) {
-    for (var x = bounds.xMin - 1; x <= bounds.xMax + 1; x++) {
-      for (var y = bounds.yMin - 1; y <= bounds.yMax + 1; y++) {
-        fn(x, y);
-      }
-    }
   }
 
 })(jQuery, window.App || {});
