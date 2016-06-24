@@ -1,10 +1,7 @@
-/* global App:true */
 (function () {
   'use strict';
 
-  window.App = window.App || {};
-
-  App.Grid = function (bounds) {
+  function Grid(bounds) {
 
     this.bounds = bounds;
     this.grid = new Array(this.bounds.xMax); // 2d array of 1's and 0's (live and dead)
@@ -18,7 +15,7 @@
 
   };
 
-  App.Grid.prototype.setAt = function (x, y, value) {
+  Grid.prototype.setAt = function (x, y, value) {
     this.grid[x][y] = value;
 
     if (value === 1) {
@@ -30,7 +27,7 @@
     }
   };
 
-  App.Grid.prototype.setPattern = function (pattern) {
+  Grid.prototype.setPattern = function (pattern) {
 
     switch (pattern) {
 
@@ -64,7 +61,7 @@
     }
   };
 
-  App.Grid.prototype.forEachCell = function (fn) {
+  Grid.prototype.forEachCell = function (fn) {
     for (var x = this.bounds.xMin - 1; x <= this.bounds.xMax + 1; x++) {
       for (var y = this.bounds.yMin - 1; y <= this.bounds.yMax + 1; y++) {
         fn(x, y);
@@ -72,11 +69,11 @@
     }
   };
 
-  App.Grid.prototype.checkIsAlive = function (x, y) {
+  Grid.prototype.checkIsAlive = function (x, y) {
     return this.grid[x] && this.grid[x][y] && this.grid[x][y] === 1;
   };
 
-  App.Grid.prototype.countLiveNeighbors = function (x, y) {
+  Grid.prototype.countLiveNeighbors = function (x, y) {
     var n = 0;
 
     for (var dx = -1; dx < 2; dx++) {
@@ -93,5 +90,7 @@
 
     return n;
   };
+
+  App.Grid = Grid;
 
 })();
