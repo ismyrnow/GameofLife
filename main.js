@@ -1,4 +1,4 @@
-(function ($, App) {
+(function (App) {
   'use strict';
 
   var ctx; // canvas 2d context
@@ -10,7 +10,7 @@
   var CELL_COLOR_DEAD = 'rgb(255,255,255)';
   var CELL_COLOR_ALIVE = 'rgb(0,0,0)';
 
-  $(init);
+  init();
 
   function init() {
     var widthPx = window.innerWidth;
@@ -109,4 +109,4 @@
     ctx.fillRect(canvasX, canvasY, CELL_SIZE, CELL_SIZE);
   }
 
-})(jQuery, window.App || {});
+})(window.App || {});
