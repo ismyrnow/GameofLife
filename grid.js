@@ -52,13 +52,13 @@
         break;
 
       case 'acorn':
-        this.grid[17][14] = 1;
-        this.grid[19][15] = 1;
-        this.grid[16][16] = 1;
-        this.grid[17][16] = 1;
-        this.grid[20][16] = 1;
-        this.grid[21][16] = 1;
-        this.grid[22][16] = 1;
+        this.grid[7][4] = 1;
+        this.grid[9][5] = 1;
+        this.grid[6][6] = 1;
+        this.grid[7][6] = 1;
+        this.grid[10][6] = 1;
+        this.grid[11][6] = 1;
+        this.grid[12][6] = 1;
         break;
 
     }
